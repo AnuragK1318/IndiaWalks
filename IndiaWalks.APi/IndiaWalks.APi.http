@@ -1,0 +1,6 @@
+@IndiaWalks.APi_HostAddress = http://localhost:5009
+
+GET {{IndiaWalks.APi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
