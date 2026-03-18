@@ -66,7 +66,17 @@ namespace IndiaWalks.APi.Context
                     Length = 2.5,
                     RegionId = 1,
                     DifficultyId = 1
-                }
+                },
+                new Walks()
+                {
+                    Id = 2,
+                    Name="Marine drive stroll",
+                    Length=3.6,
+                    RegionId = 2,
+                    DifficultyId = 1
+                },
+                new Walks() { Id = 3, Name = "Golden Temple Circuit", Length = 1.5, RegionId = 3, DifficultyId = 1 }, // PB
+                new Walks() { Id = 4, Name = "Lalbagh Garden Walk", Length = 4.2, RegionId = 5, DifficultyId = 2 }   // KA
             };
 
             modelBuilder.Entity<Walks>().HasData(Walks);

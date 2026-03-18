@@ -1,0 +1,6 @@
+@IndiaWalks.Service_HostAddress = http://localhost:5003
+
+GET {{IndiaWalks.Service_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

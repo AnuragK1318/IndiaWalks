@@ -3,6 +3,7 @@ using IndiaWalks.APi.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IndiaWalks.APi.Migrations
 {
     [DbContext(typeof(IndiaWalksDbContext))]
-    partial class IndiaWalksDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260318134747_WalksDataSeeded")]
+    partial class WalksDataSeeded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

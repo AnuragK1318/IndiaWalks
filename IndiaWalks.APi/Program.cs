@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using IndiaWalks.APi.Mapper;
 using Microsoft.Extensions.DependencyInjection;
+using IndiaWalks.APi.Abstract;
+using IndiaWalks.APi.Concrete;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,9 @@ builder.Services.AddDbContext<IndiaWalksDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("conStr"));
 });
+builder.Services.AddScoped<IRegion, RegionRepo>();
+builder.Services.AddScoped<IWalksRepo, WalksRepo>();
+
 builder.Services.AddAutoMapper(x => 
 {
     x.AddProfile<AutoMapperProfile>();
