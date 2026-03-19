@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IndiaWalks.APi.Abstract;
 using IndiaWalks.APi.Concrete;
+using IndiaWalks.APi.CustomActionFilters;
 using IndiaWalks.APi.Domain;
 using IndiaWalks.APi.DTOs;
 using Microsoft.AspNetCore.Http;
@@ -44,7 +45,7 @@ namespace IndiaWalks.APi.Controllers
         }
 
         [HttpPost]
-        [Route("CreateWalk")]
+        [ValidateModel]
         public async Task<IActionResult> CreateWalk([FromBody] addWalkRequestDto walksReqdto)
         {
             //Map DTo to domain model
@@ -59,6 +60,7 @@ namespace IndiaWalks.APi.Controllers
 
         [HttpPut]
         [Route("{id:int}")]
+        [ValidateModel]
         public async Task<IActionResult> updateWalk([FromRoute] int id, UpdateWalkRequstDto updateWalkDto)
         {
             //map DTO to domain Model

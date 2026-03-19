@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IndiaWalks.APi.Abstract;
 using IndiaWalks.APi.Context;
+using IndiaWalks.APi.CustomActionFilters;
 using IndiaWalks.APi.Domain;
 using IndiaWalks.APi.DTOs;
 using Microsoft.AspNetCore.Http;
@@ -53,33 +54,35 @@ namespace IndiaWalks.APi.Controllers
         }
 
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> AddRegion([FromBody] AddRegionRequestDto requestDto)
         {
-            //convert DTO to domain
-            var regionDomain = mapper.Map<Region>(requestDto);
+                //convert DTO to domain
+                var regionDomain = mapper.Map<Region>(requestDto);
 
-            //Repo adds it and the Db generates the ID
-            var addedRegion = await _region.AddRegionAsync(regionDomain);
+                //Repo adds it and the Db generates the ID
+                var addedRegion = await _region.AddRegionAsync(regionDomain);
 
-            //Again Map domain to DTO
-            var regiondto = mapper.Map<RegionDto>(addedRegion);
+                //Again Map domain to DTO
+                var regiondto = mapper.Map<RegionDto>(addedRegion);
 
-            return CreatedAtAction(nameof(GetRegionById), new { id = regiondto.Id }, regiondto);
+                return CreatedAtAction(nameof(GetRegionById), new { id = regiondto.Id }, regiondto);
         }
 
         [HttpPut]
         [Route("{id}")]
+        [ValidateModel]
         public async Task<IActionResult> UpdateRegion([FromRoute] int id, [FromBody] UpdateRegionRequestDto updateregiondto)
         {
-            //Map DTO to Domain
-            var regionDomain = mapper.Map<Region>(updateregiondto);
+                //Map DTO to Domain
+                var regionDomain = mapper.Map<Region>(updateregiondto);
 
-            var updatedRegion = await _region.updateRegionAsync(id,regionDomain);
-            if(updatedRegion == null)
-            {
-                return NotFound("Region with id : {id} not found ");
-            }
-            return Ok(mapper.Map<RegionDto>(updatedRegion));
+                var updatedRegion = await _region.updateRegionAsync(id, regionDomain);
+                if (updatedRegion == null)
+                {
+                    return NotFound("Region with id : {id} not found ");
+                }
+                return Ok(mapper.Map<RegionDto>(updatedRegion));
         }
 
         [HttpDelete]
