@@ -28,50 +28,62 @@ namespace IndiaWalks.APi.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllRegions")]
         public async Task<IActionResult> GetAllRegions()
         {
-            var region = await _region.GetAllRegionsAsync();
-            //If not found empty list will be retruned
-            return Ok(region);
+            //call repo method
+            var regionDomainModel = await _region.GetAllRegionsAsync();
+            //Map Domain to DTO
+            var regionDto = mapper.Map<List<RegionDto>>(regionDomainModel);
+            //return List
+            return Ok(regionDto);
         }
 
         [HttpGet]
-        [Route("GetRegionById/{id}")]
-        public async Task<IActionResult> GetRegionById([FromRoute]int id)
+        [Route("{id}")]
+        public async Task<IActionResult> GetRegionById([FromRoute] int id)
         {
             //get data from domain model
-            var region = await _region.GetRegionbyIdAsync(id);
+            var regionDomain = await _region.GetRegionbyIdAsync(id);
 
-            if (region == null)
+            if (regionDomain == null)
             {
                 return NotFound();
             }
-            return Ok(region);
+            return Ok(mapper.Map<RegionDto>(regionDomain));
         }
+
         [HttpPost]
-        [Route("AddRegion")]
         public async Task<IActionResult> AddRegion([FromBody] AddRegionRequestDto requestDto)
         {
-            var addedRegion = await _region.AddRegionAsync(requestDto);
+            //convert DTO to domain
+            var regionDomain = mapper.Map<Region>(requestDto);
 
-            return CreatedAtAction(nameof(GetRegionById), new { id = addedRegion.Id }, addedRegion);
+            //Repo adds it and the Db generates the ID
+            var addedRegion = await _region.AddRegionAsync(regionDomain);
+
+            //Again Map domain to DTO
+            var regiondto = mapper.Map<RegionDto>(addedRegion);
+
+            return CreatedAtAction(nameof(GetRegionById), new { id = regiondto.Id }, regiondto);
         }
 
         [HttpPut]
-        [Route("update/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> UpdateRegion([FromRoute] int id, [FromBody] UpdateRegionRequestDto updateregiondto)
         {
-            var updatedRegion = await _region.updateRegionAsync(id,updateregiondto);
+            //Map DTO to Domain
+            var regionDomain = mapper.Map<Region>(updateregiondto);
+
+            var updatedRegion = await _region.updateRegionAsync(id,regionDomain);
             if(updatedRegion == null)
             {
                 return NotFound("Region with id : {id} not found ");
             }
-            return Ok(updatedRegion);
+            return Ok(mapper.Map<RegionDto>(updatedRegion));
         }
 
         [HttpDelete]
-        [Route("Delete/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> DeleteRegion([FromRoute] int id)
         {
             var region = await _region.DeleteRegionAsync(id);
@@ -80,7 +92,7 @@ namespace IndiaWalks.APi.Controllers
             {
                 return NotFound();
             }
-            return Ok(region);
+            return Ok(mapper.Map<RegionDto>(region));
         }
     }
 }

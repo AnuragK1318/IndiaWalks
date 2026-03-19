@@ -20,24 +20,64 @@ namespace IndiaWalks.APi.Concrete
             
         }
 
-        public async Task<RegionDto> AddRegionAsync(AddRegionRequestDto regionRequestDto)
+        public async Task<List<Region>> GetAllRegionsAsync()
         {
-            //map dto to domain model
-            var region=_mapper.Map<Region>(regionRequestDto);
-            
+            var regionDomain= await _dbContext.Regions.ToListAsync();
+
+            return regionDomain;
+        }
+
+        public async Task<Region> GetRegionbyIdAsync(int id)
+        {
+            var regionDomain = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
+            if (regionDomain == null)
+            {
+                return null;
+            }
+                return regionDomain;
+        }
+
+        public async Task<Region> AddRegionAsync(Region regionRequestDto)
+        {
+
             //Add tracker OR add to dbContext
-            await _dbContext.AddAsync(region);
+            await _dbContext.AddAsync(regionRequestDto);
 
             //add the region in Database
             await _dbContext.SaveChangesAsync();
 
             //map the newly created domain model back to dto
-            return _mapper.Map<RegionDto>(region);
+            return regionRequestDto;
         }
 
-        public async Task<RegionDto> DeleteRegionAsync(int id)
+        public async Task<Region> updateRegionAsync(int id, Region updateRegionRequestDto)
         {
-            var regionDomain=await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
+            //When you fetch existingRegion using FirstOrDefaultAsync,
+            //Entity Framework starts "tracking" it. Any changes you make to
+            //its properties (like existingRegion.Name = ...) are noted by EF.
+            var existingRegion = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
+            if (existingRegion == null)
+            {
+                return null;
+            }
+
+            existingRegion.Name = updateRegionRequestDto.Name;
+            existingRegion.Code = updateRegionRequestDto.Code;
+            existingRegion.Area = updateRegionRequestDto.Area;
+            existingRegion.Lat = updateRegionRequestDto.Lat;
+            existingRegion.Long = updateRegionRequestDto.Long;
+            existingRegion.Population = updateRegionRequestDto.Population;
+
+            //save changes
+            await _dbContext.SaveChangesAsync();
+
+            return existingRegion;
+        }
+
+        public async Task<Region> DeleteRegionAsync(int id)
+        {
+            var regionDomain = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
+
             if (regionDomain == null)
             {
                 return null;
@@ -48,49 +88,7 @@ namespace IndiaWalks.APi.Concrete
             //Actually delete the region
             await _dbContext.SaveChangesAsync();
 
-            return _mapper.Map<RegionDto>(regionDomain);
-        }
-
-        public async Task<List<RegionDto>> GetAllRegionsAsync()
-        {
-            var regionDomain= await _dbContext.Regions.ToListAsync();
-
-            return _mapper.Map<List<RegionDto>>(regionDomain);
-        }
-
-        public async Task<RegionDto> GetRegionbyIdAsync(int id)
-        {
-            var regionDomain = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id==id);
-            if (regionDomain == null)
-            {
-                Console.WriteLine("Unable to find region with id : {id} ");
-                return null;
-            }
-            else
-            {
-                return _mapper.Map<RegionDto>(regionDomain);
-            }
-        }
-
-        public async Task<RegionDto> updateRegionAsync(int id, UpdateRegionRequestDto updateRegionRequestDto)
-        {
-            //When you fetch existingRegion using FirstOrDefaultAsync,
-            //Entity Framework starts "tracking" it. Any changes you make to
-            //its properties (like existingRegion.Name = ...) are noted by EF.
-            var existingRegion =await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
-            if (existingRegion == null)
-            {
-                return null;
-            }
-
-            //map updateDto to domainModel
-            _mapper.Map(updateRegionRequestDto,existingRegion);
-
-            //save changes
-            await _dbContext.SaveChangesAsync();
-
-            //map again to send to frontend
-            return _mapper.Map<RegionDto>(existingRegion);
+            return regionDomain;
         }
     }
 }

@@ -5,10 +5,10 @@ namespace IndiaWalks.APi.Abstract
 {
     public interface IRegion
     {
-        Task<List<RegionDto>> GetAllRegionsAsync();
-        Task<RegionDto> GetRegionbyIdAsync(int id);
-        Task<RegionDto> AddRegionAsync(AddRegionRequestDto regionRequestDto);
-        Task<RegionDto> updateRegionAsync(int id,UpdateRegionRequestDto updateRegionRequestDto);
-        Task<RegionDto> DeleteRegionAsync(int id);
+        Task<List<Region>> GetAllRegionsAsync();
+        Task<Region> GetRegionbyIdAsync(int id);
+        Task<Region> AddRegionAsync(Region region);
+        Task<Region> updateRegionAsync(int id,Region region);
+        Task<Region> DeleteRegionAsync(int id);
     }
 }
