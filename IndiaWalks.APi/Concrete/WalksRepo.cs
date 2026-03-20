@@ -40,7 +40,26 @@ namespace IndiaWalks.APi.Concrete
                 .Contains(filter.filterQuery
                 .ToLower()));
             }
-            return await walks.ToListAsync();
+
+            if(!string.IsNullOrWhiteSpace(filter.sortBy))
+            {
+                if(filter.sortBy.Equals("Name",StringComparison.OrdinalIgnoreCase))
+                {
+                    walks = filter.isAscending ? walks.OrderBy(x=>x.Name)
+                        : walks.OrderByDescending(x=>x.Name);
+                }
+                else if(filter.sortBy.Equals("Length",StringComparison.OrdinalIgnoreCase))
+                {
+                    walks = filter.isAscending ? walks.OrderBy(x=>x.Length)
+                        : walks.OrderByDescending (x=>x.Length);
+                }
+            }
+            //pagination
+            var skipResults = (filter.PageNumber - 1) * filter.PageSize;
+
+            return await walks.Skip(skipResults)
+                .Take(filter.PageSize)
+                .ToListAsync();
         }
 
         public async Task<Walks> getWalksByIdAsync(int id)

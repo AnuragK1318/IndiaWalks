@@ -32,7 +32,29 @@ namespace IndiaWalks.APi.Concrete
                 .Contains(filter.filterQuery
                 .ToLower()));
             }
-            return await region.ToListAsync();
+
+            //use sort
+            //check if sortBy is not null
+            if(!string.IsNullOrWhiteSpace(filter.sortBy))
+            {
+                if(filter.sortBy.Equals("Name",StringComparison.OrdinalIgnoreCase))
+                {
+                    region = filter.isAscending? region.OrderBy(x=>x.Name) 
+                        : region.OrderByDescending(x=>x.Name);
+                }
+                else if(filter.sortBy.Equals("Code",StringComparison.OrdinalIgnoreCase))
+                {
+                    region = filter.isAscending? region.OrderBy(x=>x.Code) 
+                        : region.OrderByDescending(x=>x.Code);
+                }
+            }
+
+            //pagination
+            // If PageNumber is 2 and PageSize is 10, we skip (2-1)*10 = 10 records
+            var skipResults = (filter.PageNumber-1) * filter.PageSize;
+            return await region.Skip(skipResults)
+                .Take(filter.PageSize)
+                .ToListAsync();
         }
 
         public async Task<Region> GetRegionbyIdAsync(int id)
