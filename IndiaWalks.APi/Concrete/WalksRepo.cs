@@ -1,6 +1,7 @@
 ﻿using IndiaWalks.APi.Abstract;
 using IndiaWalks.APi.Context;
 using IndiaWalks.APi.Domain;
+using IndiaWalks.APi.DTOs;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,12 +24,23 @@ namespace IndiaWalks.APi.Concrete
             return walks;
         }
 
-        public async Task<List<Walks>> getAllWalksAsync()
+        public async Task<List<Walks>> getAllWalksAsync(WalkListReqDto filter)
         {
-            return await _dbContext.Walks
+            //AsQueryable is mostl used for filtering pagination,sorting
+            var walks = _dbContext.Walks
                 .Include("Region")
                 .Include("Difficulty")
-                .ToListAsync();
+                .AsQueryable();
+
+            //apply filtering logic
+            if(!string.IsNullOrWhiteSpace(filter.filterOn) && !string.IsNullOrWhiteSpace(filter.filterQuery))
+            {
+                //filter walks where name contains the query string
+                walks = walks.Where(x => x.Name.ToLower()
+                .Contains(filter.filterQuery
+                .ToLower()));
+            }
+            return await walks.ToListAsync();
         }
 
         public async Task<Walks> getWalksByIdAsync(int id)

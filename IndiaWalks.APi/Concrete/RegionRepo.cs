@@ -20,11 +20,19 @@ namespace IndiaWalks.APi.Concrete
             
         }
 
-        public async Task<List<Region>> GetAllRegionsAsync()
+        public async Task<List<Region>> GetAllRegionsAsync(RegionListRequestDto filter)
         {
-            var regionDomain= await _dbContext.Regions.ToListAsync();
+            //use AsQuerable for filter,sort,pagination
+            var region = _dbContext.Regions.AsQueryable();
 
-            return regionDomain;
+            //use filter
+            if(!string.IsNullOrWhiteSpace(filter.filterOn) && !string.IsNullOrWhiteSpace(filter.filterQuery))
+            {
+                region = region.Where(x => x.Name.ToLower()
+                .Contains(filter.filterQuery
+                .ToLower()));
+            }
+            return await region.ToListAsync();
         }
 
         public async Task<Region> GetRegionbyIdAsync(int id)

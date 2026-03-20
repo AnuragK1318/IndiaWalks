@@ -29,10 +29,10 @@ namespace IndiaWalks.APi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllRegions()
+        public async Task<IActionResult> GetAllRegions([FromQuery] RegionListRequestDto filter)
         {
             //call repo method
-            var regionDomainModel = await _region.GetAllRegionsAsync();
+            var regionDomainModel = await _region.GetAllRegionsAsync(filter);
             //Map Domain to DTO
             var regionDto = mapper.Map<List<RegionDto>>(regionDomainModel);
             //return List

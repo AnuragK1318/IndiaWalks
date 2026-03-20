@@ -21,11 +21,12 @@ namespace IndiaWalks.APi.Controllers
             _walksRepo = walksRepo;
         }
 
+        //api/Walks?filterOn=Name&filterQuery=Peak
         [HttpGet]
-        public async Task<IActionResult> GetAllWalks()
+        public async Task<IActionResult> GetAllWalks([FromQuery] WalkListReqDto filter)
         {
             //call repository method and get the walks domain
-            var walksDomain = await _walksRepo.getAllWalksAsync();
+            var walksDomain = await _walksRepo.getAllWalksAsync(filter);
             //convert the walks domain to dto and return to client
             return Ok(_mapper.Map<List<WalksDto>>(walksDomain));
         }
