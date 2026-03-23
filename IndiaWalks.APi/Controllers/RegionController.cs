@@ -4,6 +4,7 @@ using IndiaWalks.APi.Context;
 using IndiaWalks.APi.CustomActionFilters;
 using IndiaWalks.APi.Domain;
 using IndiaWalks.APi.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ namespace IndiaWalks.APi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="Reader")]
         public async Task<IActionResult> GetAllRegions([FromQuery] RegionListRequestDto filter)
         {
             //call repo method
@@ -41,6 +43,7 @@ namespace IndiaWalks.APi.Controllers
 
         [HttpGet]
         [Route("{id}")]
+        [Authorize(Roles ="Reader")]
         public async Task<IActionResult> GetRegionById([FromRoute] int id)
         {
             //get data from domain model
@@ -55,6 +58,7 @@ namespace IndiaWalks.APi.Controllers
 
         [HttpPost]
         [ValidateModel]
+        [Authorize(Roles ="Writer")]
         public async Task<IActionResult> AddRegion([FromBody] AddRegionRequestDto requestDto)
         {
                 //convert DTO to domain
@@ -72,6 +76,7 @@ namespace IndiaWalks.APi.Controllers
         [HttpPut]
         [Route("{id}")]
         [ValidateModel]
+        [Authorize(Roles ="Writer")]
         public async Task<IActionResult> UpdateRegion([FromRoute] int id, [FromBody] UpdateRegionRequestDto updateregiondto)
         {
                 //Map DTO to Domain
@@ -87,6 +92,7 @@ namespace IndiaWalks.APi.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Roles ="Writer")]
         public async Task<IActionResult> DeleteRegion([FromRoute] int id)
         {
             var region = await _region.DeleteRegionAsync(id);

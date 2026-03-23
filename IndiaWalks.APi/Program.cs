@@ -5,6 +5,11 @@ using IndiaWalks.APi.Mapper;
 using Microsoft.Extensions.DependencyInjection;
 using IndiaWalks.APi.Abstract;
 using IndiaWalks.APi.Concrete;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Cryptography;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,13 +24,50 @@ builder.Services.AddDbContext<IndiaWalksDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("conStr"));
 });
+builder.Services.AddDbContext<AuthDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("authStr"));
+});
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddRoles<IdentityRole>()
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("IndiaWalks")
+    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric=false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 1;
+});
+
 builder.Services.AddScoped<IRegion, RegionRepo>();
 builder.Services.AddScoped<IWalksRepo, WalksRepo>();
+builder.Services.AddScoped<ITokenRepo, TokenRepo>();
 
-builder.Services.AddAutoMapper(x => 
+builder.Services.AddAutoMapper(x =>
 {
     x.AddProfile<AutoMapperProfile>();
 });
+
+var JwtKey = builder.Configuration["Jwt:Key"]; 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    {
+        AuthenticationType = "Jwt",
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudiences = new[] { builder.Configuration["Jwt:Audience"] },
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtKey))
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,6 +79,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

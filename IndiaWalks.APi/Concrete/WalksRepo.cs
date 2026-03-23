@@ -40,7 +40,7 @@ namespace IndiaWalks.APi.Concrete
                 .Contains(filter.filterQuery
                 .ToLower()));
             }
-
+            //sorting
             if(!string.IsNullOrWhiteSpace(filter.sortBy))
             {
                 if(filter.sortBy.Equals("Name",StringComparison.OrdinalIgnoreCase))
