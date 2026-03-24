@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Update.Internal;
+using System.Text.Json;
 using System.Xml;
 
 namespace IndiaWalks.APi.Controllers
@@ -20,23 +21,31 @@ namespace IndiaWalks.APi.Controllers
         private readonly IndiaWalksDbContext context;
         private readonly IMapper mapper;
         private readonly IRegion _region;
+        private readonly ILogger<RegionController> _logger;
 
-        public RegionController(IndiaWalksDbContext context,IMapper mapper,IRegion region)
+        public RegionController(IndiaWalksDbContext context,
+            IMapper mapper,
+            IRegion region,
+            ILogger<RegionController> logger)
         {
             this.context = context;
             this.mapper = mapper;
             _region = region;
-            
+            _logger = logger;
         }
 
         [HttpGet]
         [Authorize(Roles ="Reader")]
         public async Task<IActionResult> GetAllRegions([FromQuery] RegionListRequestDto filter)
         {
+            _logger.LogInformation("GetAll Regions action method invoked");
             //call repo method
             var regionDomainModel = await _region.GetAllRegionsAsync(filter);
             //Map Domain to DTO
             var regionDto = mapper.Map<List<RegionDto>>(regionDomainModel);
+
+            _logger.LogInformation($"Finished getAll regions req " +
+                $"with data{JsonSerializer.Serialize(regionDto)}");
             //return List
             return Ok(regionDto);
         }
