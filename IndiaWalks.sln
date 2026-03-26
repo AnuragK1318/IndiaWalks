@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36908.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndiaWalks.APi", "IndiaWalks.APi\IndiaWalks.APi.csproj", "{7D20DF34-A49F-42FA-B481-707C2DE5EF94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndiaWalks.UI", "IndiaWalks.UI\IndiaWalks.UI.csproj", "{A94B8B49-DF73-4E89-81FB-4FC50152720D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{7D20DF34-A49F-42FA-B481-707C2DE5EF94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D20DF34-A49F-42FA-B481-707C2DE5EF94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D20DF34-A49F-42FA-B481-707C2DE5EF94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A94B8B49-DF73-4E89-81FB-4FC50152720D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A94B8B49-DF73-4E89-81FB-4FC50152720D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A94B8B49-DF73-4E89-81FB-4FC50152720D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A94B8B49-DF73-4E89-81FB-4FC50152720D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

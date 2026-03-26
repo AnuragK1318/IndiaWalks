@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="p-5 mb-4 bg-dark text-white rounded-3 shadow"
+     style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1524492459426-03f99640cb71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; min-height: 450px; display: flex; align-items: center;">
+    <div class="container-fluid py-5 text-center">
+        <h1 class="display-3 fw-bold">Explore the Heart of India</h1>
+        <p class="fs-4 mb-4">Discover breathtaking trails, cultural heritage, and hidden gems across every region.</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a asp-controller="Region" asp-action="Region" class="btn btn-primary btn-lg px-4 gap-3 shadow">Explore Regions</a>
+            <a href="#about" class="btn btn-outline-light btn-lg px-4">Learn More</a>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5" id="about">
+    <div class="row text-center mb-5">
+        <div class="col-md-4">
+            <div class="p-3">
+                <i class="bi bi-map text-primary display-4"></i>
+                <h3 class="mt-3">28+ Regions</h3>
+                <p class="text-muted">From the Himalayas to the coastal backwaters of Kerala.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3">
+                <i class="bi bi-compass text-success display-4"></i>
+                <h3 class="mt-3">100+ Walks</h3>
+                <p class="text-muted">Curated trails for beginners and professional trekkers alike.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-3">
+                <i class="bi bi-people text-warning display-4"></i>
+                <h3 class="mt-3">Expert Guides</h3>
+                <p class="text-muted">Verified local guides to help you navigate safely.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6">
+            <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                 class="img-fluid rounded shadow-lg mb-4 mb-lg-0" alt="Indian Landscape">
+        </div>
+        <div class="col-lg-6 ps-lg-5">
+            <h2 class="fw-bold text-primary">Your Journey Starts Here</h2>
+            <p class="lead">IndiaWalks is your digital companion for exploring the vast diversity of the Indian subcontinent. We provide detailed data on regions, population, and walking trails.</p>
+            <ul class="list-unstyled">
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Real-time region tracking</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Difficulty-rated walking trails</li>
+                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Population and area insights</li>
+            </ul>
+            <a asp-controller="Region" asp-action="Add" class="btn btn-outline-primary mt-3">Contribute a New Region</a>
+        </div>
+    </div>
+</div>
+
+<div class="bg-light p-5 rounded-3 text-center border shadow-sm mb-5">
+    <h2 class="fw-bold">Ready to discover a new path?</h2>
+    <p class="text-muted">Join thousands of explorers using IndiaWalks to plan their next adventure.</p>
+    <a asp-controller="Region" asp-action="Region" class="btn btn-dark btn-lg px-5 mt-2">Get Started Now</a>
+</div>
